@@ -8,7 +8,7 @@ case class Table(name: String)
 trait MovieApi extends JsonHelper{
   val movieApiHelper = new MovieApiHelper
 
-  val movieRoutes: Route = create
+  val movieRoutes: Route = create ~ delete
 
   def create: Route = {
     path("movie" / "create") {
@@ -25,4 +25,6 @@ trait MovieApi extends JsonHelper{
       }
     }
   }
+
+  def delete: Route = ???
 }
