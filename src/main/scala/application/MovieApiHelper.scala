@@ -1,8 +1,8 @@
 package application
 
-import akka.http.javadsl.model.{ContentTypes, HttpEntities}
-import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.model.StatusCodes.{BadRequest, InternalServerError, OK}
+import akka.http.javadsl.model.HttpEntities
+import akka.http.scaladsl.model.StatusCodes._
+import akka.http.scaladsl.model.{ContentTypes, _}
 import akka.util.ByteString
 import models.Movie
 
@@ -16,7 +16,7 @@ class MovieApiHelper {
     Future
       .successful(HttpResponse(BadRequest,
         entity = HttpEntities
-          .create(ContentTypes.APPLICATION_JSON, "Invalid Json Field")))
+          .create(ContentTypes.`application/json`, "Invalid Json Field")))
   }
 
   def handleTableCreationRequest(tableReq: Table): Future[HttpResponse] = {
@@ -24,12 +24,12 @@ class MovieApiHelper {
     val newTable = movie.createTable(tableReq.name)
     newTable.map {
       _ =>
-        HttpResponse(OK,
-          entity = HttpEntities.create(ContentTypes.APPLICATION_JSON, ByteString("Okay")))
+        println("Okay request")
+        HttpResponse(OK, entity = ByteString("Table has been created"))
     }.recoverWith {
       case _: Exception =>
-        Future.successful(HttpResponse(InternalServerError,
-          entity = HttpEntities.create(ContentTypes.APPLICATION_JSON, "INTERNAL_SERVER_ERROR")))
+        println("in exception....!!!!")
+        Future.successful(HttpResponse(InternalServerError, entity = ByteString("INTERNAL_SERVER_ERROR")))
     }
   }
 }
